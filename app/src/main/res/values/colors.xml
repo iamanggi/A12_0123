@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="biruLoad">#FF779DCF</color>
+    <color name="biruNav">#FFC2D5EF</color>
+    <color name="biruFoot">#FF779DCF</color>
+    <color name="biruFont">#FF004AAD</color>
 </resources>
