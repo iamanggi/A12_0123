@@ -1,4 +1,4 @@
-package com.example.tugasakhira12.Service.Siswa
+package com.example.tugasakhira12.Service
 
 import com.example.tugasakhira12.model.Siswa
 import com.example.tugasakhira12.model.SiswaDetailResponse
