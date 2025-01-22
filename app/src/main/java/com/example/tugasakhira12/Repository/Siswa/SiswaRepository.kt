@@ -1,6 +1,6 @@
 package com.example.tugasakhira12.Repository.Siswa
 
-import com.example.tugasakhira12.Service.Siswa.SiswaService
+import com.example.tugasakhira12.Service.SiswaService
 import com.example.tugasakhira12.model.Siswa
 import okio.IOException
 
