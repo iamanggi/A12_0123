@@ -27,7 +27,7 @@ data class Kursus (
 
     val deskripsi: String,
     val kategori: String,
-    val harga: String,
+    val harga: Double,
 
     @SerialName("id_instruktur")
     val idInstruktur: String
