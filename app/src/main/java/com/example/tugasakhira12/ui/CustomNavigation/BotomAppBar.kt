@@ -1,5 +1,6 @@
 package com.example.tugasakhira12.ui.CustomNavigation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,44 +55,36 @@ fun CustomBottomAppBar(
     ) {
 
         BottomBarIcon(
-            icon = Icons.Default.Home,
-            label = "Home",
+            imageResource = R.drawable.home, // Ganti dengan gambar Home
             isSelected = selectedItem == 0
-        ) {onHomeClick() }
+        ) { onHomeClick() }
 
         BottomBarIcon(
-            icon = Icons.Default.AccountBox,
-            label = "Siswa",
+            imageResource = R.drawable.student, // Ganti dengan gambar Siswa
             isSelected = selectedItem == 1
-        ) {onSiswaClick() }
-
+        ) { onSiswaClick() }
 
         BottomBarIcon(
-            icon = Icons.Default.Person,
-            label = "Instruktur",
+            imageResource = R.drawable.teacher, // Ganti dengan gambar Instruktur
             isSelected = selectedItem == 2
-        ) { onInstrukturClick()}
+        ) { onInstrukturClick() }
 
         BottomBarIcon(
-            icon = Icons.Default.Notifications,
-            label = "Kursus",
+            imageResource = R.drawable.kurss, // Ganti dengan gambar Kursus
             isSelected = selectedItem == 3
-        ) {onKursusClick() }
-
+        ) { onKursusClick() }
 
         BottomBarIcon(
-            icon = Icons.Default.Info,
-            label = "Pendaftaran",
+            imageResource = R.drawable.pendf, // Ganti dengan gambar Pendaftaran
             isSelected = selectedItem == 4
-        ) { onPendaftaranClick()}
+        ) { onPendaftaranClick() }
 
     }
 }
 
 @Composable
 fun BottomBarIcon(
-    icon: ImageVector,
-    label: String,
+    imageResource: Int,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -100,18 +94,13 @@ fun BottomBarIcon(
             .padding(4.dp)
             .clickable { onClick() }
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
+        Image(
+            painter = painterResource(id = imageResource),
+            contentDescription = "",
             modifier = Modifier.size(30.dp),
-            tint = Color.White
+
         )
-        Text(
-            text = label,
-            fontSize = 15.sp,
-            textAlign = TextAlign.Center,
-            color = Color.White
-        )
+
     }
 }
 
