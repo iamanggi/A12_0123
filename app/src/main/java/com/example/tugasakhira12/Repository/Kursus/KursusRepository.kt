@@ -27,7 +27,7 @@ class NetworkKursusRepository(
         try {
             val response = KursusApiService.deleteKursus(id_kursus)
             if (!response.isSuccessful){
-                throw IOException("Failed to delete mahasiswa. HTTP Status code: ${response.code()}")
+                throw IOException("Failed to delete kursus. HTTP Status code: ${response.code()}")
             } else{
                 response.message()
                 println(response.message())
