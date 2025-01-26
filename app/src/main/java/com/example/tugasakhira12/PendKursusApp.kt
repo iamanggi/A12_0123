@@ -1,13 +1,13 @@
 package com.example.tugasakhira12
 
 import android.app.Application
-import com.example.tugasakhira12.Repository.Siswa.AppContainer
-import com.example.tugasakhira12.Repository.Siswa.SiswaContainer
+import com.example.tugasakhira12.Repository.MainAppContainer
+
 
 class PendKursusApp: Application(){
-    lateinit var container: AppContainer
+    lateinit var mainAppContainer: MainAppContainer
     override fun onCreate() {
         super.onCreate()
-        container= SiswaContainer()
+        mainAppContainer =MainAppContainer()
     }
 }
