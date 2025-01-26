@@ -30,7 +30,10 @@ data class Kursus (
     val harga: Double,
 
     @SerialName("id_instruktur")
-    val idInstruktur: String
+    val idInstruktur: String,
+
+    @SerialName("nama_instruktur")
+    val namaInstruktur: String  = ""
 )
 
 
