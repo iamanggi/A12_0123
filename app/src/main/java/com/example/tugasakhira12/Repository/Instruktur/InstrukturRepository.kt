@@ -1,9 +1,7 @@
 package com.example.tugasakhira12.Repository.Instruktur
 
 import com.example.tugasakhira12.Service.InstrukturService
-import com.example.tugasakhira12.Service.SiswaService
 import com.example.tugasakhira12.model.Instruktur
-import com.example.tugasakhira12.model.Siswa
 import java.io.IOException
 
 interface InstrukturRepository{
