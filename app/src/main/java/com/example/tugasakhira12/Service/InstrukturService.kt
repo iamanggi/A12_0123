@@ -18,19 +18,19 @@ interface InstrukturService {
         "Content-Type: application/json"
     )
 
-    @GET(".")
+    @GET("instruktur/.")
     suspend fun getInstruktur(): InstResponse
 
-    @GET("{id_instruktur}")
+    @GET("instruktur/{id_instruktur}")
     suspend fun getInstrukturByID(@Path("id_instruktur")id_instruktur: String): InstDetailResponse
 
-    @POST("add")
+    @POST("instruktur/add")
     suspend fun insertInstruktur(@Body instruktur: Instruktur)
 
-    @PUT("{id_instruktur}")
+    @PUT("instruktur/{id_instruktur}")
     suspend fun updateInstruktur(@Path("id_instruktur")id_instruktur: String, @Body instruktur: Instruktur)
 
-    @DELETE("{id_instruktur}")
+    @DELETE("instruktur/{id_instruktur}")
     suspend fun deleteInstruktur(@Path("id_instruktur")id_instruktur: String): Response<Void>
 
 }
