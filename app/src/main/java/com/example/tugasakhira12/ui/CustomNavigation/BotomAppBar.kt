@@ -10,14 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,13 +18,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.tugasakhira12.R
 
 @Composable
@@ -55,27 +43,27 @@ fun CustomBottomAppBar(
     ) {
 
         BottomBarIcon(
-            imageResource = R.drawable.home, // Ganti dengan gambar Home
+            imageResource = R.drawable.home,
             isSelected = selectedItem == 0
         ) { onHomeClick() }
 
         BottomBarIcon(
-            imageResource = R.drawable.student, // Ganti dengan gambar Siswa
+            imageResource = R.drawable.student,
             isSelected = selectedItem == 1
         ) { onSiswaClick() }
 
         BottomBarIcon(
-            imageResource = R.drawable.teacher, // Ganti dengan gambar Instruktur
+            imageResource = R.drawable.teacher,
             isSelected = selectedItem == 2
         ) { onInstrukturClick() }
 
         BottomBarIcon(
-            imageResource = R.drawable.kurss, // Ganti dengan gambar Kursus
+            imageResource = R.drawable.kurss,
             isSelected = selectedItem == 3
         ) { onKursusClick() }
 
         BottomBarIcon(
-            imageResource = R.drawable.pendf, // Ganti dengan gambar Pendaftaran
+            imageResource = R.drawable.pendf,
             isSelected = selectedItem == 4
         ) { onPendaftaranClick() }
 
