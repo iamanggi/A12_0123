@@ -29,5 +29,13 @@ data class Pendaftaran (
     val idKursus: String,
 
     @SerialName("tgl_pendaftaran")
-    val tglPendaftaran: String
+    val tglPendaftaran: String,
+
+    val status: String,
+
+    @SerialName("nama_siswa")
+    val namaSiswa: String? = "",
+
+    @SerialName("nama_kursus")
+    val namaKursus: String? = ""
 )
