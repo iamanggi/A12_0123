@@ -19,19 +19,19 @@ interface SiswaService {
         "Content-Type: application/json"
     )
 
-    @GET(".")
+    @GET("siswa/.")
     suspend fun getSiswa(): SiswaResponse
 
-    @GET("{id_siswa}")
+    @GET("siswa/{id_siswa}")
     suspend fun getSiswaByID(@Path("id_siswa")id_siswa: String): SiswaDetailResponse
 
-    @POST("add")
+    @POST("siswa/add")
     suspend fun insertSiswa(@Body siswa: Siswa)
 
-    @PUT("{id_siswa}")
+    @PUT("siswa/{id_siswa}")
     suspend fun updateSiswa(@Path("id_siswa")id_siswa: String,@Body siswa: Siswa)
 
-    @DELETE("{id_siswa}")
+    @DELETE("siswa/{id_siswa}")
     suspend fun deleteSiswa(@Path("id_siswa")id_siswa: String): Response<Void>
 
 }
