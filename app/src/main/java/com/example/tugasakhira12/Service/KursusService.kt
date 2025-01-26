@@ -18,19 +18,19 @@ interface KursusService {
         "Content-Type: application/json"
     )
 
-    @GET(".")
+    @GET("kursus/.")
     suspend fun getKursus(): KursusResponse
 
-    @GET("{id_kursus}")
+    @GET("kursus/{id_kursus}")
     suspend fun getKursusByID(@Path("id_kursus")id_kursus: String): KursusDetailResponse
 
-    @POST("add")
+    @POST("kursus/add")
     suspend fun insertKursus(@Body kursus: Kursus)
 
-    @PUT("{id_kursus}")
+    @PUT("kursus/{id_kursus}")
     suspend fun updateKursus(@Path("id_kursus")id_kursus: String, @Body kursus: Kursus)
 
-    @DELETE("{id_kursus}")
+    @DELETE("kursus/{id_kursus}")
     suspend fun deleteKursus(@Path("id_kursus")id_kursus: String): Response<Void>
 
 }
