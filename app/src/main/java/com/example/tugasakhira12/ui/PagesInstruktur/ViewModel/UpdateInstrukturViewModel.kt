@@ -7,13 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tugasakhira12.Repository.Instruktur.InstrukturRepository
-import com.example.tugasakhira12.Repository.Siswa.SiswaRepository
 import com.example.tugasakhira12.ui.PagesInstruktur.View.DestinasiUpdateInstruktur
-import com.example.tugasakhira12.ui.PagesSiswa.View.DestinasiUpdate
-import com.example.tugasakhira12.ui.PagesSiswa.ViewModel.InsertUiEvent
-import com.example.tugasakhira12.ui.PagesSiswa.ViewModel.InsertUiState
-import com.example.tugasakhira12.ui.PagesSiswa.ViewModel.toSiswa
-import com.example.tugasakhira12.ui.PagesSiswa.ViewModel.toUiStateSiswa
 import kotlinx.coroutines.launch
 
 
