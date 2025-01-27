@@ -173,19 +173,8 @@ fun DetailCard(
                 }
             )
             ComponentDetailPend(
-                judul = "Id Kursus",
-                isinya = pendaftaran.idKursus,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.AccountBox,
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-            )
-            ComponentDetailPend(
-                judul = "Id Siswa",
-                isinya = pendaftaran.idSiswa,
+                judul = "Nama Siswa",
+                isinya = pendaftaran.namaSiswa.toString(),
                 icon = {
                     Icon(
                         imageVector = Icons.Default.Person,
@@ -194,6 +183,18 @@ fun DetailCard(
                     )
                 }
             )
+            ComponentDetailPend(
+                judul = "Nama Kursus",
+                isinya = pendaftaran.namaKursus.toString(),
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.AccountBox,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            )
+
             ComponentDetailPend(
                 judul = "Tanggal Pendaftaran",
                 isinya = pendaftaran.tglPendaftaran,
