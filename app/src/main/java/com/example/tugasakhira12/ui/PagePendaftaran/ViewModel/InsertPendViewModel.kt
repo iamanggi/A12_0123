@@ -102,7 +102,9 @@ data class InsertPendUiEvent(
     val tglPendaftaran: String = "",
     val status: String = "",
     val namaSiswa: String = "",
-    val namaKursus: String = ""
+    val namaKursus: String = "",
+    val kategori: String = ""
+
 )
 
 data class InsertPendUiState(
@@ -117,14 +119,13 @@ data class FormErrorStatePendf(
     val idKursus: String? = null,
     val tglPendaftaran: String? = null,
     val status: String? = null,
+    val katgori: String? = null
 ){
     fun isValid():Boolean{
         return idPendaftaran == null && idSiswa == null && idKursus == null
                 && tglPendaftaran  == null && status  == null
     }
 }
-
-
 
 fun InsertPendUiEvent.toPendaftaran(): Pendaftaran = Pendaftaran(
     idPendaftaran = idPendaftaran,
@@ -133,7 +134,9 @@ fun InsertPendUiEvent.toPendaftaran(): Pendaftaran = Pendaftaran(
     tglPendaftaran = tglPendaftaran,
     status = status,
     namaSiswa = namaSiswa,
-    namaKursus = namaKursus
+    namaKursus = namaKursus,
+    kategori = kategori
+
 )
 
 fun Pendaftaran.toUiStatePend(): InsertPendUiState = InsertPendUiState(
@@ -142,10 +145,11 @@ fun Pendaftaran.toUiStatePend(): InsertPendUiState = InsertPendUiState(
 
 fun Pendaftaran.toInsertPendUiEvent(): InsertPendUiEvent = InsertPendUiEvent(
     idPendaftaran = idPendaftaran,
-    idSiswa = idSiswa,
-    idKursus = idKursus,
+    idSiswa = idSiswa.toString(),
+    idKursus = idKursus.toString(),
     tglPendaftaran = tglPendaftaran,
     status = status,
     namaSiswa = namaSiswa.toString(),
-    namaKursus = namaKursus.toString()
+    namaKursus = namaKursus.toString(),
+    kategori = kategori.toString()
 )
