@@ -304,8 +304,8 @@ fun PengelolaHalaman(
         composable(DestinasiHomePendaftaran.route) {
             PendaftaranScreen(
                 navigateBack = {
-                    navController.navigate(DestinasiHomePendaftaran.route) {
-                        popUpTo(DestinasiHomePendaftaran.route) {
+                    navController.navigate(DestinasiHomeScreen.route) {
+                        popUpTo(DestinasiHomeScreen.route) {
                             inclusive = true
                         }
                     }
@@ -345,7 +345,7 @@ fun PengelolaHalaman(
             idPendaftaran?.let {
                 DetailPendaftaranView(
                     navigateBack = {
-                        navController.navigateUp()
+                        navController.popBackStack()
                     },
                     onEditClick = { idPendaftaran ->
                         navController.navigate("${DestinasiUpdatePendaftaran.route}/$idPendaftaran")

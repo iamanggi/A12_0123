@@ -2,7 +2,9 @@ package com.example.tugasakhira12.ui.PagePendaftaran.View
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -122,6 +124,9 @@ fun EntryBody(
     ){
     val status = listOf("Berhasil", "Tidak Berhasil")
 
+    val selectedKursus = listKursus.find { it.namaKursus == insertPendUiState.insertPendUiEvent.namaKursus }
+    val kategori = selectedKursus?.kategori.orEmpty()
+
     Column(
         modifier = modifier.padding(12.dp)
     ){
@@ -190,6 +195,10 @@ fun EntryBody(
             text = errorState.idKursus ?: "", //digunakan untuk memunculkan pesan errornya
             color = Color.Red
         )
+        if (kategori.isNotEmpty()) {
+            Text(text = "Kategori: $kategori", style = MaterialTheme.typography.bodyMedium)
+        }
+        Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
             value = insertPendUiState.insertPendUiEvent.tglPendaftaran,
             onValueChange = {onPendfValueChange(insertPendUiState.insertPendUiEvent.copy(tglPendaftaran = it)) },

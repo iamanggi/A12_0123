@@ -1,11 +1,12 @@
 package com.example.tugasakhira12.Repository.Pendaftaran
 
 import com.example.tugasakhira12.Service.PendaftaranService
+import com.example.tugasakhira12.model.PendResponse
 import com.example.tugasakhira12.model.Pendaftaran
 import okio.IOException
 
 interface PendaftaranRepository{
-    suspend fun getPendaftaran(): List<Pendaftaran>
+    suspend fun getPendaftaran(): PendResponse
     suspend fun insertPendaftaran(pendaftaran: Pendaftaran)
     suspend fun updatePendaftaran(id_pendaftaran: String, pendaftaran: Pendaftaran)
     suspend fun deletePendaftaran(id_pendaftaran: String)
@@ -38,9 +39,9 @@ class NetworkPendRepository(
         }
     }
 
-    override suspend fun getPendaftaran(): List<Pendaftaran> {
-        return PendaftaranApiService.getPendaftaran().data //karena struktur json sudah berbeda
-    }
+    override suspend fun getPendaftaran(): PendResponse =
+         PendaftaranApiService.getPendaftaran()
+
     override suspend fun getPendaftaranById(id_pendaftaran: String): Pendaftaran {
         return PendaftaranApiService.getPendaftaranByID(id_pendaftaran).data
     }

@@ -38,7 +38,8 @@ object PenyediaViewModel{
         initializer { UpdateInstrukturViewModel(createSavedStateHandle(), instrukturRepository = pendKursusApp().mainAppContainer.instrukturRepository) }
 
         //Kursus
-        initializer{ HomeKursusViewModel(pendKursusApp().mainAppContainer.kursusRepository)}
+        initializer{ HomeKursusViewModel(pendKursusApp().mainAppContainer.kursusRepository,
+            pendKursusApp().mainAppContainer.instrukturRepository)}
         initializer{ InsertKursusViewModel(
             pendKursusApp().mainAppContainer.kursusRepository,
             pendKursusApp().mainAppContainer.instrukturRepository)}

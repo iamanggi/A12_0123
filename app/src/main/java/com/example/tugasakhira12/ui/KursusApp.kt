@@ -23,7 +23,7 @@ fun KursusApp(
     val appContainer = (LocalContext.current.applicationContext as PendKursusApp).mainAppContainer
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+//        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ){
         Surface (
             modifier = Modifier
