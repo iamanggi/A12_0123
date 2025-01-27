@@ -192,8 +192,8 @@ fun DetailCard(
             )
 
             ComponentDetailKrs(
-                judul = "ID Instruktur",
-                isinya = kursus.idInstruktur,
+                judul = "Nama Instruktur",
+                isinya = kursus.namaInstruktur,
                 modifier = Modifier.background(MaterialTheme.colorScheme.surface,
                     shape = MaterialTheme.shapes.small)
             )
