@@ -1,23 +1,32 @@
 package com.example.tugasakhira12.ui.PageKursus.View
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -73,7 +82,6 @@ fun KursusScreen(
     navPendaftaran: () -> Unit,
     viewModel: HomeKursusViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
-
     val showDialog = remember { mutableStateOf(false) } // State untuk dialog konfirmasi
     val kursusToDelete = remember { mutableStateOf<Kursus?>(null) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -81,6 +89,7 @@ fun KursusScreen(
     LaunchedEffect(Unit) {
         viewModel.getKrs() // Memanggil fungsi untuk mengambil data kursus
     }
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -114,12 +123,13 @@ fun KursusScreen(
             }
         },
     ) { innerPadding ->
+        // Use a Column with verticalScroll
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()) // Ensure this is applied
         ) {
             SearchBar(
                 query = viewModel.searchQuery,
@@ -234,8 +244,6 @@ fun KursusLayout(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HeaderRow()
-
         kursus.forEach { kursusItem ->
             KursusCard(
                 kursus = kursusItem,
@@ -249,171 +257,122 @@ fun KursusLayout(
 
 
 @Composable
-fun HeaderRow() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp).clip(shape = RoundedCornerShape(8.dp))
-            .background(color = colorResource(id = R.color.biruTabel))
-            .border(1.dp, Color.Black),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "ID",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            maxLines = 2, // Membatasi hanya 1 baris
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Nama Kursus",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            maxLines = 2,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(2f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Deskripsi",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            maxLines = 2,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.8f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Kategori",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            maxLines = 2,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.5f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Harga",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            maxLines = 2,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(2f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Id instruktur",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            maxLines = 2,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.2f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Aksi",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            maxLines = 2,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.6f)
-                .padding(8.dp),
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
 fun KursusCard(
     kursus: Kursus,
     modifier: Modifier = Modifier,
     onDeleteClick: (Kursus) -> Unit,
     onDetailClick: (String) -> Unit = {}
 ) {
-    Row(
+    Card(
         modifier = modifier
-            .fillMaxWidth()
-            .background(Color(0xFFF7F7F7))
-            .border(1.dp, Color.Gray)
-            .padding(6.dp)
-            .clickable { onDetailClick(kursus.idKursus) },
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+            .padding(8.dp)
+            .clickable { onDetailClick(kursus.idKursus) }
+            .background(MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        shape = RoundedCornerShape(12.dp),
     ) {
-        Text(
-            text = kursus.idKursus,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1, // Membatasi hanya 1 baris
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1f)
-                .padding(6.dp)
-        )
-        Text(
-            text = kursus.namaKursus,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(2f)
-                .padding(6.dp)
-        )
-        Text(
-            text = kursus.deskripsi,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(2f)
-                .padding(6.dp)
-        )
-        Text(
-            text = kursus.kategori,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.5f)
-                .padding(6.dp)
-        )
-        Text(
-            text = kursus.harga.toString(),
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(2f)
-                .padding(6.dp)
-        )
-        Text(
-            text = kursus.idInstruktur,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.5f)
-                .padding(6.dp)
-        )
-        IconButton(
-            onClick = { onDeleteClick(kursus) },
-            modifier = Modifier.weight(0.8f)
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Hapus Kursus"
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = kursus.namaKursus.uppercase(),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                IconButton(
+                    onClick = { onDeleteClick(kursus) },
+                    modifier = Modifier.size(28.dp) // Mengatur ukuran tombol hapus
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+
+            // Informasi lainnya tetap sama
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Email,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Deskripsi: ${kursus.deskripsi}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Kategori: ${kursus.kategori}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Harga: ${kursus.harga}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.AccountBox,
+                    contentDescription = "",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Nama Instruktur: ${kursus.namaInstruktur}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
-
-

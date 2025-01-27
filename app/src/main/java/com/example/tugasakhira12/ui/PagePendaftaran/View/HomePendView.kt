@@ -8,18 +8,28 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -31,6 +41,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -79,6 +90,7 @@ fun PendaftaranScreen(
     val showDialog = remember { mutableStateOf(false) }
     val pendToDelete = remember { mutableStateOf<Pendaftaran?>(null) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val selectedCategory = remember { mutableStateOf("Semua") }
 
     LaunchedEffect(Unit) {
         viewModel.getPndftrn() // Memanggil fungsi untuk mengambil data pendaftaran
@@ -124,6 +136,15 @@ fun PendaftaranScreen(
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                FilterButton("Semua", selectedCategory) { selectedCategory.value = "Semua" }
+                FilterButton("Saintek", selectedCategory) { selectedCategory.value = "Saintek" }
+                FilterButton("Soshum", selectedCategory) { selectedCategory.value = "Soshum" }
+            }
+
             PendaftaranStatus(
                 pendUiState = viewModel.pndfUIState,
                 retryAction = { viewModel.getPndftrn() },
@@ -133,7 +154,8 @@ fun PendaftaranScreen(
                     pendToDelete.value = pendf
                     showDialog.value = true
                 },
-                onEditClick = navigateToEdit
+                onEditClick = navigateToEdit,
+                selectedCategory = selectedCategory.value
             )
 
             if (showDialog.value) {
@@ -164,13 +186,35 @@ fun PendaftaranScreen(
 }
 
 @Composable
+fun FilterButton(label: String, selectedCategory: MutableState<String>, onClick: () -> Unit) {
+    val isSelected = selectedCategory.value == label
+    TextButton(
+        onClick = {
+            onClick()
+        },
+        modifier = Modifier
+            .padding(2.dp)
+            .background(
+                if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(90.dp)
+            )
+    ) {
+        Text(
+            text = label,
+            color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Composable
 fun PendaftaranStatus(
     pendUiState: PendUiState,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     onDetailClick: (String) -> Unit,
     onDeleteClick: (Pendaftaran) -> Unit = {},
-    onEditClick: (String) -> Unit = {}
+    onEditClick: (String) -> Unit = {},
+    selectedCategory: String
 ) {
     when (pendUiState) {
         is PendUiState.Loading -> OnLoading(modifier = modifier.fillMaxSize())
@@ -180,8 +224,15 @@ fun PendaftaranStatus(
                     Text(text = "Tidak ada data Pendaftaran")
                 }
             } else {
+                // Filter pendaftaran berdasarkan kategori
+                val filteredPendaftaran = if (selectedCategory == "Semua") {
+                    pendUiState.pendaftaran
+                } else {
+                    pendUiState.pendaftaran.filter { it.kategori == selectedCategory }
+                }
+
                 PendaftaranLayout(
-                    pendaftaran = pendUiState.pendaftaran,
+                    pendaftaran = filteredPendaftaran,
                     modifier = modifier.fillMaxSize(),
                     onDetailClick = { onDetailClick(it) },
                     onDeleteClick = { onDeleteClick(it) },
@@ -249,83 +300,18 @@ fun PendaftaranLayout(
     onDeleteClick: (Pendaftaran) -> Unit = {}
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        HeaderRow()
-
-        pendaftaran.forEach { PendItem ->
+        pendaftaran.forEach { pendItem ->
             PendaftaranCard(
-                pendaftaran = PendItem,
-                modifier = Modifier.fillMaxWidth(),
-                onDeleteClick = { onDeleteClick(PendItem) },
-                onDetailClick = { onDetailClick(PendItem.idPendaftaran) }
+                pendaftaran = pendItem,
+                onDeleteClick = { onDeleteClick(pendItem) },
+                onDetailClick = { onDetailClick(pendItem.idPendaftaran) }
             )
         }
-    }
-}
-
-@Composable
-fun HeaderRow() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp).clip(shape = RoundedCornerShape(8.dp))
-            .background(color = colorResource(id = R.color.biruTabel))
-            .border(1.dp, Color.Black),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "Id",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Id siswa",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .weight(1.6f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "id Kursus",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .weight(1.7f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Tgl",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .weight(1f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Status",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .weight(2f)
-                .padding(8.dp)
-        )
-        Text(
-            text = "Aksi",
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .weight(1.2f)
-                .padding(8.dp),
-            textAlign = TextAlign.Center
-        )
     }
 }
 
@@ -336,71 +322,124 @@ fun PendaftaranCard(
     onDeleteClick: (Pendaftaran) -> Unit,
     onDetailClick: (String) -> Unit = {}
 ) {
-    Row(
+
+    val kategoriImage = when (pendaftaran.kategori) {
+        "Saintek" -> painterResource(id = R.drawable.sigma)
+        "Soshum" -> painterResource(id = R.drawable.buku)
+        else -> painterResource(id = R.drawable.info)
+    }
+
+    Card(
         modifier = modifier
-            .fillMaxWidth()
-            .background(Color(0xFFF7F7F7))
-            .border(1.dp, Color.Gray)
-            .padding(6.dp)
+            .padding(8.dp)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(16.dp))
             .clickable { onDetailClick(pendaftaran.idPendaftaran) },
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     ) {
-        Text(
-            text = pendaftaran.idPendaftaran,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1, // Membatasi hanya 1 baris
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1f)
-                .padding(6.dp)
-        )
-        Text(
-            text = pendaftaran.idSiswa,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.6f)
-                .padding(6.dp)
-        )
-        Text(
-            text = pendaftaran.idKursus,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1.7f)
-                .padding(6.dp)
-        )
-        Text(
-            text = pendaftaran.tglPendaftaran,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(1f)
-                .padding(6.dp)
-        )
-        Text(
-            text = pendaftaran.status,
-            style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Visible,
-            modifier = Modifier
-                .weight(2f)
-                .padding(6.dp)
-        )
-        IconButton(
-            onClick = { onDeleteClick(pendaftaran) },
-            modifier = Modifier.weight(0.8f)
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Hapus Pendaftaran"
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Image(
+                        painter = kategoriImage,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "ID Pendaftaran: ${pendaftaran.idPendaftaran}",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                IconButton(
+                    onClick = { onDeleteClick(pendaftaran) },
+                    modifier = Modifier.size(28.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Nama Siswa: ${pendaftaran.namaSiswa}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.AccountBox,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Nama Kursus: ${pendaftaran.namaKursus}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Tanggal: ${pendaftaran.tglPendaftaran}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Status: ${pendaftaran.status}",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+            }
         }
     }
 }
-
-
