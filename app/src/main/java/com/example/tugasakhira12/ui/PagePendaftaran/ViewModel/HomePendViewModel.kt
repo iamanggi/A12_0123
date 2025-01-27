@@ -5,12 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tugasakhira12.Repository.Kursus.KursusRepository
 import com.example.tugasakhira12.Repository.Pendaftaran.PendaftaranRepository
-import com.example.tugasakhira12.Repository.Siswa.SiswaRepository
-import com.example.tugasakhira12.model.Kursus
 import com.example.tugasakhira12.model.Pendaftaran
-import com.example.tugasakhira12.model.Siswa
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -36,7 +32,7 @@ class HomePendViewModel(
         viewModelScope.launch {
             pndfUIState = PendUiState.Loading
             pndfUIState = try {
-                PendUiState.Success(pndf.getPendaftaran())
+                PendUiState.Success(pndf.getPendaftaran().data)
             } catch (e: IOException) {
                 PendUiState.Error
             } catch (e: HttpException) {
