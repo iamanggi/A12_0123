@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tugasakhira12.Repository.Instruktur.InstrukturRepository
 import com.example.tugasakhira12.Repository.Kursus.KursusRepository
+import com.example.tugasakhira12.model.Instruktur
 import com.example.tugasakhira12.model.Kursus
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -17,7 +19,10 @@ sealed class KursusUiState {
     object Loading : KursusUiState()
 }
 
-class HomeKursusViewModel(private val krs: KursusRepository) : ViewModel() {
+class HomeKursusViewModel(
+    private val krs: KursusRepository,
+    private val ins: InstrukturRepository
+) : ViewModel() {
 
     var krsUIState: KursusUiState by mutableStateOf(KursusUiState.Loading)
         private set
@@ -27,8 +32,12 @@ class HomeKursusViewModel(private val krs: KursusRepository) : ViewModel() {
 
     private var allKursus: List<Kursus> = listOf()
 
+    var listInstruktur by mutableStateOf(listOf<Instruktur>())
+        private set
+
     init {
         getKrs()
+        loadData()
     }
 
     // Mendapatkan daftar kursus
@@ -75,6 +84,15 @@ class HomeKursusViewModel(private val krs: KursusRepository) : ViewModel() {
                 krsUIState = KursusUiState.Error
             } catch (e: HttpException) {
                 krsUIState = KursusUiState.Error
+            }
+        }
+    }
+    fun loadData() {
+        viewModelScope.launch {
+            try {
+                listInstruktur = ins.getInstruktur()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
