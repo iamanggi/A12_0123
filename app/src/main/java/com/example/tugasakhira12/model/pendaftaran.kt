@@ -23,10 +23,10 @@ data class Pendaftaran (
     val idPendaftaran: String,
 
     @SerialName("id_siswa")
-    val idSiswa: String,
+     val idSiswa: String? = null,
 
     @SerialName("id_kursus")
-    val idKursus: String,
+    val idKursus: String? = null,
 
     @SerialName("tgl_pendaftaran")
     val tglPendaftaran: String,
@@ -34,8 +34,10 @@ data class Pendaftaran (
     val status: String,
 
     @SerialName("nama_siswa")
-    val namaSiswa: String? = "",
+    val namaSiswa: String? = null,
 
     @SerialName("nama_kursus")
-    val namaKursus: String? = ""
+    val namaKursus: String? = null,
+
+    val kategori: String? = null
 )
